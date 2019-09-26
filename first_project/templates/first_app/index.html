@@ -45,15 +45,31 @@
 					</div>
 				</div>
 				<div class="col-lg-9 col-md-9">
+					{% if user.is_authenticated %}
+
+					<a href="acccounts/register" class="site-btn header-btn">Hello, {{user.first_name}}</a>
+
+					{% else %}
+
 					<a href="acccounts/register" class="site-btn header-btn">Signup</a>
+
+					{% endif %}
+
 					<nav class="main-menu">
 						<ul>
 							<li><a href="/">Home</a></li>
 							<li><a href="#">Students</a></li>
 							<li><a href="#">Tutors</a></li>
 							<li><a href="contact.html">About Us</a></li>
+							{% if user.is_authenticated %}
+
+							<li><a href="acccounts/logout">Logout</a></li>
+
+							{% else %}
 
 							<li><a href="acccounts/login">Login</a></li>
+
+							{% endif %}
 
 						</ul>
 					</nav>
