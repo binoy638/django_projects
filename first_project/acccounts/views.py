@@ -11,7 +11,7 @@ def login(request):
 
         if user is not None:
             auth.login(request,user)
-            return redirect("/")
+            return redirect("profile")
 
         else:
             messages.info(request, 'invalid credential')
@@ -57,3 +57,6 @@ def register(request):
 def logout(request):
     auth.logout(request)
     return redirect('/')
+
+def profile(request):
+    return render(request, 'profile.html')
