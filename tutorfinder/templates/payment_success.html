@@ -1,0 +1,12 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content %}
+<div class="container-fluid"  style="padding: 70px 0px;">
+
+<h1 style="color:green;"> Payment Successfull </h1>
+
+<h3> For invoice check your profile </h3>
+</p>
+<a href="{% url 'series_detail' slug=cou.slug %}"> Start learning now </a>
+
+{% endblock content %}

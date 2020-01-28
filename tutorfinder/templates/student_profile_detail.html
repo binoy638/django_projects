@@ -1,0 +1,87 @@
+
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content %}
+
+
+<style type="text/css">
+.profile-header {
+    transform: translateY(5rem);
+}
+
+
+/*
+*
+* ==========================================
+* FOR DEMO PURPOSE
+* ==========================================
+*
+*/
+body {
+    background: #654ea3;
+    background: -webkit-linear-gradient(to right, #654ea3, #eaafc8);
+    background: linear-gradient(to right, #654ea3, #eaafc8);
+    min-height: 100vh;
+}
+
+
+</style>
+
+
+  <div class="card " style="width: 58rem; height: auto; margin: auto; padding: 30px;">
+
+    <div class="row py-5 px-4">
+        <div class="col-xl-12 ">
+
+            <!-- Profile widget -->
+            <div class="bg-white shadow rounded overflow-hidden">
+                <div class="px-4 pt-0 pb-4 bg-dark">
+                    <div class="media align-items-end profile-header">
+
+                      {% if request.user.is_student == True %}
+                      {% if object.username == request.user.student.username %}
+                        <div class="profile mr-3"><img src="{{object.profile_pic.url}}" alt="..." width="130" class="rounded mb-2 img-thumbnail"><a href="{% url 'editprofilestudent' slug=request.user.student.slug %}" class="btn btn-dark btn-sm btn-block">Edit profile</a></div>
+
+
+{% endif %}
+{% else %}
+                      <div class="profile mr-3"><img src="{{object.profile_pic.url}}" alt="..." width="130" class="rounded mb-2 img-thumbnail"></div>
+                        {% endif %}
+                        <div class="media-body mb-5 text-white">
+                            <h4 class="mt-0 mb-0">{{object.first_name}} {{object.Last_name}}</h4>
+                            <p class="small mb-4"> <i class="fa fa-map-marker mr-2"></i>{{object.Country}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-light p-4 d-flex justify-content-end text-center">
+                </div>
+
+                <hr>
+                Username: {{object.username}} <p> <br>
+                Email: {{object.email}} <p>
+                Phone No: {{object.Phone}} <p>
+                Gender: {{object.get_gender_display}} <p>
+
+  </div>
+
+  {% if request.user.is_student == True %}
+  {% if object.username == request.user.student.username %}
+<div>
+  <h4>Transactions History</h4> </p>
+  {% for t in tra %}
+Reference Number: {{t.Referrence_Number}} <br>
+Course : {{t.course.series_title}}<br>
+Amount : {{t.amount}}<br>
+Payment Mode : {{t.payment_mode}}<br>
+Transaction date:  {{t.date}}<br>
+<hr>
+</p>
+  {% endfor %}
+  </div>
+  {% endif %}
+  {% endif %}
+  </div>
+  </div>
+  </div>
+{% endblock content %}

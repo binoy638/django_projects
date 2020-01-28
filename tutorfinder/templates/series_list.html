@@ -1,0 +1,75 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content %}
+
+<style type="text/css">
+  .card-product .img-wrap {
+    border-radius: 3px 3px 0 0;
+    overflow: hidden;
+    position: relative;
+    height: 220px;
+    width: auto;
+    text-align: center;
+}
+.card-product .img-wrap img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+}
+.card-product .info-wrap {
+    overflow: hidden;
+    padding: 15px;
+    border-top: 1px solid #eee;
+}
+.card-product .bottom-wrap {
+    padding: 15px;
+    border-top: 1px solid #eee;
+}
+
+.label-rating { margin-right:10px;
+    color: #333;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.card-product .price-old {
+    color: #999;
+}
+</style>
+
+
+
+<div class="container-fluid" style="padding: 100px 0px;">
+
+</div>
+
+
+
+        <div class="row">
+
+              {% for object in object_list %}
+          <div class="col-xs-12 col-sm-6 col-md-3 d-flex align-items-stretch">
+      	<figure class="card card-product">
+      		<div class="img-wrap"><img src="{{object.thumbnail.url}}" width="265" height="220" ></div>
+      		<figcaption class="info-wrap">
+      				<h4 class="title">{{object.series_title}}</h4>
+
+      		</figcaption>
+      		<div class="bottom-wrap">
+      			<a href="{{object.get_absolute_url}}" class="btn btn-sm btn-primary float-right">View Course</a>
+      			<div class="price-wrap h5">
+      				<span class="price-new">₹{{object.price}}
+      			</div> <!-- price-wrap.// -->
+      		</div> <!-- bottom-wrap.// -->
+      	</figure>
+      </div>
+
+    {% endfor %}
+    </div>
+
+
+
+
+
+
+{% endblock content %}

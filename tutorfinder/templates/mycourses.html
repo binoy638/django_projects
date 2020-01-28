@@ -1,0 +1,19 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content %}
+
+
+
+
+<div class="container" style="padding: 100px 100px">
+<h1>Welcome,{{request.user.student.first_name}} {{request.user.student.Last_name}}</h1>
+<hr>
+<h3> Your Enrolled Courses </h3> </p>
+{% for ob in t %}
+<a href="{{ob.course.get_absolute_url}}">{{ob.course.series_title}}</a> </p>
+{% endfor %}
+
+
+
+
+{% endblock content %}

@@ -1,0 +1,71 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css?family=Rubik:700&display=swap" rel="stylesheet">
+<body id="bg" style="background-image: url('{% static 'images/bg.jpg' %}')";>
+<style type="text/css">
+        #bg{
+          background-size: 1980px 1080px;
+          background-repeat: no-repeat;
+          background-position: top;
+          background-attachment: fixed;
+}
+.container-fluid{
+  padding: 200px 250px;
+
+}
+.intro-newslatter input[type=text]{
+	height: 53px;
+	width: 50%;
+}
+
+.intro-newslatter .site-btn {
+	min-width: 214px;
+}
+.site-btn{
+  color: red;
+  padding: 17px 10px;
+  display: inline-block;
+	min-width: 196px;
+	text-align: center;
+	border: none;
+	padding: 15px 20px;
+	font-weight: 600;
+	font-size: 16px;
+	position: relative;
+	color: #fff;
+	cursor: pointer;
+	background: #d82a4e;
+}
+
+.site-btn:hover {
+	color: #fff;
+}
+input[type="text"]::placeholder {
+
+
+     text-align: center;
+     opacity: 0.5;
+ }
+</style>
+<section class="homeview">
+  <div class="container-fluid">
+    <div class="hero-text text-white">
+      <h1 align=center style="font-size: 66px; font-family: 'Rubik', sans-serif, bold;color:white;">Learn Anything,  Anywhere,Anytime!</h1>
+      <p>Connecting students all over the world to the best instructors, OnlineCourses is helping individuals reach their goals and pursue their dreams.</p>
+      <div class="row">
+  <div class="col-lg-10 offset-lg-1" style = "text-align:center; padding: 200px;">
+    <form class="intro-newslatter" action="{% url 'search_results' %}" method="get">
+      <input type="text" type="search" name="q" id="id_q" placeholder="What do you want to learn?" aria-label="Search" required>
+      <button class="site-btn">Search</button>
+    </form>
+  </div>
+</div>
+    </div>
+</div>
+</section>
+
+
+{% endblock content %}

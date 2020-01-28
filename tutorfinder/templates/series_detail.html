@@ -1,0 +1,358 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content %}
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style type="text/css">
+  .score {
+    display: block;
+    font-size: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .score-wrap {
+    display: inline-block;
+    position: relative;
+    height: 19px;
+  }
+
+  .score .stars-active {
+    color: #EEBD01;
+    position: relative;
+    z-index: 10;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .score .stars-inactive {
+    color: grey;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-text-stroke: initial;
+    /* overflow: hidden; */
+  }
+
+  .checked {
+    color: orange;
+  }
+
+  .ul {
+    padding: 0;
+    margin: 0;
+  }
+
+  .ul .li {
+    list-style-type: none;
+    display: inline-block;
+    margin: 10px;
+    color: black;
+    text-shadow: 2px 2px 7px grey;
+    font-size: 25px !important;
+  }
+
+  .ul .li:hover {
+    color: orange;
+  }
+
+  .ul .li.active,
+  .ul .li.secondary-active {
+    color: orange;
+  }
+
+  input[type="radio"] {
+    display: none;
+  }
+
+  .course-button{
+    text-align: left;
+
+  }
+
+
+</style>
+
+<div class="container-fluid" style="padding: 100px 100px">
+
+  {% if is_instructor == True or request.user.is_student == True %}
+  <img src="{{series.thumbnail.url}}" width="330" height="250">
+  <h1 style="align:center>">{{series.series_title}} </h1> ₹{{series.price}}
+  </p>
+  <small style="color:green">by {{series.series_instructor.first_name}} {{series.series_instructor.Last_name}}</small>
+
+  <div>
+
+    <hr>
+{% if rev == True %}
+
+<h1 style="font-size: 15px;">{{avg.rating__avg}}/5</h1>
+
+<span class="score">
+<div class="score-wrap">
+
+  <span class="stars-inactive">
+              <i class="fa fa-star" aria-hidden="true"></i>
+              <i class="fa fa-star" aria-hidden="true"></i>
+              <i class="fa fa-star" aria-hidden="true"></i>
+              <i class="fa fa-star" aria-hidden="true"></i>
+              <i class="fa fa-star" aria-hidden="true"></i>
+          </span>
+<span class="stars-active" style="width:{% widthratio avg.rating__avg 1 20 %}%;">
+    <i class="fa fa-star" aria-hidden="true"></i>
+    <i class="fa fa-star" aria-hidden="true"></i>
+    <i class="fa fa-star" aria-hidden="true"></i>
+    <i class="fa fa-star" aria-hidden="true"></i>
+    <i class="fa fa-star" aria-hidden="true"></i>
+
+</span>
+
+
+  </div>
+
+  {% else %}
+
+  No reviews of this course yet
+  {% endif %}
+
+<div class="course-button">
+
+  {% if request.user.is_student == True %}
+  {% if ob == False %}
+
+
+
+  <a href="{% url 'payment' slug=series.slug username=request.user.student  %}"><button type="button" class="btn btn-warning">Buy This Course</button></a> </p>
+
+  {% endif %}
+  {% endif %}
+</div>
+<hr>
+<h4> Course Overview </h4>
+{{series.series_summary}}
+<section id="updatecourse">
+
+
+  <div>
+
+    {% if request.user.is_tutor == True %}
+    <h3 style="padding: 50px 1px;"> Update Your Course </h3>
+ <h6>Add Lessons To This Course</h6> </p>
+        <form  id="form" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+
+                    <div class="form-group col-md-6">
+
+                      <label class="control-label" for="email">Video Title:</label>
+                      <div>
+                        <input type="text" name="video_title" class="form-control" id="video_title" required>
+                      </div>
+
+                    <div>
+            <label for="exampleFormControlTextarea1">Video Description(Optional)</label>
+            <textarea class="form-control" name="video_summary" id="video_summary" id="exampleFormControlTextarea1" rows="4" required></textarea>
+          </div>
+                    <div>
+                      <label class="control-label col-md-6" for="pwd">Video Number:</label>
+                      <div >
+                        <input type="number" class="form-control" name="video_number" id="video_number" required>
+                      </div>
+                    </div>
+                    <label for="exampleFormControlFile1">Select Video File</label>
+                    <input type="file" name="videofile" class="form-control-file" id="videofile" required>
+
+                    <div style="text-align: left;"> </P>
+                    <button type="submit" class="btn btn-success" >Submit</button>
+                    </div>
+          </div>
+
+      </form>
+    {% endif %}
+
+
+  </div>
+
+
+
+</section>
+
+
+
+
+
+
+  <div class="container-fluid" id="videocont" style="padding: 200px 0px">
+
+
+    <button type="course-button" id="course-button" class="btn btn-info">  <h4>View Course Content</h4> </button> <br>
+
+      <div class="course-content" style="padding: 20px 0px;">
+
+
+        <div style="width: 500px;">
+{% if novid == True %}
+          <div class="alert alert-danger alert-white rounded" >
+              <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+              No lessons has been uploaded yet!
+          </div>
+{% else %}
+
+          {% if ob == True or is_instructor == True %}
+              <div class="alert alert-success alert-white rounded" >
+                <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+                    Start Learning Now!
+                </div>
+
+                      <div style="font-size: 18px;">
+                        {% for video in series.video_set.all %}
+                        {{video.video_number}}. <a href="{{video.get_absolute_url}}">{{video.video_title}}</a><br>
+                      </div>
+                        {% endfor %}
+          {% else %}
+                <div class="alert alert-warning alert-white rounded" >
+                  <button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button>
+                  You need to buy the course to view this content!
+                </div>
+                <div style="font-size: 18px;">
+                  {% for video in series.video_set.all %}
+                  {{video.video_number}}.{{video.video_title}}<br>
+                  {% endfor %}
+        </div>
+
+        {% endif %}
+
+{% endif %}
+        </div>
+      </div>
+
+
+
+
+
+
+<section class="review">
+
+  <h1> Reviews & Ratings </h1>
+  <hr>
+
+<!-- Reviews -->
+
+<div class="row">
+    <div class="col-sm-7">
+{% for r in series.review_set.all %}
+
+
+      <hr/>
+      <div class="review-block">
+        <div class="row">
+          <div class="col-sm-3">
+            <img src="{{r.student.profile_pic.url}}" width="50" class="rounded mb-2 img-thumbnail">
+            <div class="review-block-name"><a href="{{r.student.get_absolute_url}}">{{r.student.first_name}} {{r.student.Last_name}}</a></div>
+            <div class="review-block-date">{{r.review_date}}</div>
+          </div>
+          <div class="col-sm-9">
+            <div class="review-block-rate">
+              {% if r.rating == 5 %}
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              {% elif r.rating == 4 %}
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star "></span>
+              {% elif r.rating == 3 %}
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star "></span>
+              <span class="fa fa-star "></span>
+              {% elif r.rating == 2 %}
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star "></span>
+              <span class="fa fa-star "></span>
+              <span class="fa fa-star "></span>
+              {% elif r.rating == 1 %}
+              <span class="fa fa-star checked"></span>
+              <span class="fa fa-star "></span>
+              <span class="fa fa-star "></span>
+              <span class="fa fa-star "></span>
+              <span class="fa fa-star "></span>
+              {% endif %}
+            </div>
+            <div class="review-block-description">{{r.review}}</div>
+          </div>
+        </div>
+        <hr/>
+
+{% endfor %}
+
+
+
+
+
+
+
+
+<!-- Review Form -->
+
+
+{% if request.user.is_student == True and ob == True %}
+
+{% if student_review == True %}
+
+<h3> You already reviewed this course </h3>
+
+{% else %}
+
+
+<form method="POST" action="{% url 'reviewform' slug=series.slug %}"> {% csrf_token %}
+  </p>
+
+  <div class="form-group">
+<label for="review"></label>
+<textarea class="form-control" rows="5" name="review" id="review" required></textarea>
+</div>
+<ul class="ul">
+<li class="li"><label for="rating_1"><i class="fa fa-star" aria-hidden="true"></i><input type="radio" name="rating" id="rating_1" value="1"></li>
+<li class="li"><label for="rating_2"><i class="fa fa-star" aria-hidden="true"></i><input type="radio" name="rating" id="rating_2" value="2"></li>
+<li class="li"><label for="rating_3"><i class="fa fa-star" aria-hidden="true"></i><input type="radio" name="rating" id="rating_3" value="3"></li>
+<li class="li"><label for="rating_4"><i class="fa fa-star" aria-hidden="true"></i><input type="radio" name="rating" id="rating_4" value="4"></li>
+<li class="li"><label for="rating_5"><i class="fa fa-star" aria-hidden="true"></i><input type="radio" name="rating" id="rating_5" value="5"></li>
+</ul>
+  <button type="submit" class="btn btn-success">Submit Your Review</button>
+</form>
+
+{% endif %}
+{% endif %}
+
+</section>
+
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('li').on('click', function() {
+        $(".course-content").hide();
+      $('li').removeClass('active');
+      $('li').removeClass('secondary-active');
+      $(this).addClass('active');
+      $(this).prevAll().addClass('secondary-active');
+    });
+  });
+</script>
+{% else %}
+
+<h1> You need a student account to view courses </h1>
+<a href="{% url 'registerstudent'%}"<h3>Create a student account now </h3>
+
+{% endif %}
+  {% endblock content %}

@@ -1,0 +1,35 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'stylesheets/style.css' %}">
+<section id="team" class="pb-5">
+<div class="container">
+    <h5 class="section-title h1">Students</h5>
+    <div class="row">
+        <!-- Team member -->
+        {% for students in object_list %}
+        <div class="col-xs-12 col-sm-6 col-md-4">
+
+                <div class="mainflip">
+                    <div class="frontside">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <p><img class=" img-fluid" src="{{students.profile_pic.url}}" alt="card image"></p>
+                                <h4 class="card-title">{{ students.student.first_name }} {{ students.student.Last_name }}</h4>
+                                <p class="card-text">{{ students.student.Country }} ,{{ students.student.City }} <br>
+                                  <a href="{{ students.student.get_absolute_url }}"><button type="button" class="btn btn-primary">View Profile</button></a> </p>
+
+                                 </p>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+{% endfor %}
+    </div>
+</div>
+</section>
+
+{% endblock content %}

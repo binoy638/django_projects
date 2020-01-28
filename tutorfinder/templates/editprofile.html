@@ -1,0 +1,52 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content %}
+    <h2> Edit </h2>
+    <div class ="container-fluid" style="padding: 30px;">
+    <div class="card" style="width: auto; height: auto;" >
+    <form method="post" enctype="multipart/form-data" align="center">
+      {% csrf_token %}
+      {% for field in edit_form %}
+
+        <p>
+            {{field.label_tag}}
+            {{field}}
+
+            {% if field.help_text %}
+                <small style="color: grey;">{{field.help_text}}</small>
+
+            {% endif %}
+
+            {% for error in field.errors %}
+              <small style="color: red;">{{error}}</small>
+            {% endfor %}
+        </p>
+
+
+
+      {% if edit_form.non_field_errors %}
+        <div style="color:red;">
+          <p>{{edit_form.non_field_errors}}</p>
+          </div>
+      {% endif %}
+      </p>
+
+
+      {% endfor %}
+
+      {% if success_message %}
+        <p style="color:green"; text-align: center;">  {{success_message}}  </p>
+        {% endif %}
+
+
+
+      <button type="submit"> Save Changes</button>
+      </form>
+      <a href = "{% url 'tutorprofile'%}"> Back to Profile <a>
+</div>
+</div>
+
+
+
+
+  {% endblock content %}

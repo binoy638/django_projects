@@ -1,0 +1,73 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content %}
+
+
+<style type="text/css">
+  .card-product .img-wrap {
+    border-radius: 3px 3px 0 0;
+    overflow: hidden;
+    position: relative;
+    height: 220px;
+    text-align: center;
+}
+.card-product .img-wrap img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: cover;
+}
+.card-product .info-wrap {
+    overflow: hidden;
+    padding: 10px;
+    border-top: 1px solid #eee;
+}
+.card-product .bottom-wrap {
+    padding: 10px;
+    border-top: 1px solid #eee;
+}
+
+.label-rating { margin-right:10px;
+    color: #333;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.card-product .price-old {
+    color: #999;
+}
+</style>
+
+
+<div class="container"  style="padding: 50px 0px;">
+<h1> {{object.tutorial_category}} </h1>
+<hr>
+
+<div class="row">
+
+  {% for s in series %}
+  {% ifequal object.tutorial_category s.series_category|stringformat:"s" %}
+  <div class="col-xs-12 col-sm-6 col-md-3 d-flex align-items-stretch">
+<figure class="card card-product">
+  <div class="img-wrap"><img src="{{s.thumbnail.url}}" height="300" ></div>
+  <figcaption class="info-wrap">
+      <h4 class="title">{{s.series_title}}</h4>
+
+  </figcaption>
+  <div class="bottom-wrap">
+    <a href="{{s.get_absolute_url}}" class="btn btn-sm btn-primary float-right">View Course</a>
+    <div class="price-wrap h5">
+      <span class="price-new">₹{{s.price}}
+    </div> <!-- price-wrap.// -->
+  </div> <!-- bottom-wrap.// -->
+</figure>
+</div>
+{% endifequal %}
+{% endfor %}
+</div>
+
+
+
+
+</div>
+
+{% endblock content %}

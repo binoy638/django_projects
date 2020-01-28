@@ -1,0 +1,60 @@
+{% extends 'index.html' %}
+{% load staticfiles %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'stylesheets/style.css' %}">
+<style type="text/css">
+  h1.{
+    text-align: left;
+  }
+  </style>
+
+
+<section id="team" class="pb-5">
+    <h1 align="left">Search Results for "{{temp}}"</h1>
+<div class="container">
+  <form action="{% url 'search_results' %}" method="get">
+     <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4">
+       <div class="input-group">
+         <input type="search" placeholder="What're you searching for?" name="q" id="id_q" aria-describedby="button-addon1" class="form-control border-0 bg-light">
+         <div class="input-group-append">
+           <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
+         </div>
+       </div>
+     </div>
+   </form>
+    <div class="row">
+      {% if object_list %}
+
+        {% for profile in object_list %}
+        <div class="col-xs-12 col-sm-6 col-md-4">
+
+                <div class="mainflip">
+                    <div class="frontside">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <p><a href="{{profile.get_absolute_url}}" ><img class=" img-fluid" src="{{profile.thumbnail.url}}" alt="card image"></a></p>
+                               <h4 class="card-title">{{ profile.series_title }}</h4>
+                                <small> By </small>
+                                <h6>{{ profile.series_instructor.first_name }} {{ profile.series_instructor.Last_name }} <br> <br> ₹{{profile.price}} </h6> </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <h2> No results found</h2>
+
+{% endif %}
+
+
+</div>
+</section>
+
+<script type="text/javascript">
+  document.getElementById("id_q").value = "{{query}}"
+
+</script>
+
+{% endblock content %}

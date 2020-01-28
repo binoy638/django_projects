@@ -1,0 +1,88 @@
+{% extends 'index.html' %}
+{% load humanize %}
+{% load staticfiles %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<div class="container-fluid"  style="padding: 50px 0px;">
+
+<div class="container">
+  <div class="jumbotron">
+<h2>  {{question.question_title}} </h2><br>
+<p> {{question.question_details}}
+  <div style="text-align: right;">
+  <small style="color:blue;">Asked {{question.timestamp}}<br>By : {{question.student.first_name}} {{question.student.Last_name}} </small> </p>
+  </div>
+  </div>
+</div>
+
+
+
+<div class="container">
+
+
+  <div id="answer" >
+    <div class="alert alert-success alert-white rounded" >
+     {{answer_count}} Answers
+   </div>
+      {% for a in question.answer_set.all %}
+
+
+<i class="fa fa-arrow-circle-right"></i><div style="margin-top: -25px;margin-left: 20px;"> {{a.ans}} </div>  <p>
+
+  {% if a.user.is_tutor == True %}
+
+<div style="text-align:right">
+  <small style="color:grey;">  {{a.timestamp|naturaltime}}<br><a href= "{{a.user.tutor.get_absolute_url}}" style="color:grey;"><span><i class="fa fa-star" style="color:red;"></i></span> Instructor</a></small> </div>
+  <p>
+<hr>
+  {% else %}
+
+<div style="text-align:right">
+  <small style="color:grey;"> {{a.timestamp|naturaltime}}<br>
+    <a href= "{{a.user.student.get_absolute_url}}" style="color:grey;">{{a.user.username}}</a></small> </div> <p>
+<hr>
+  {% endif %}
+    {% endfor %}
+</div>
+</div>
+
+
+
+
+<div class="container">
+
+  <form class="form-group" method="POST" id="answerform" enctype="multipart/form-data">
+  {% csrf_token %}
+  <label name="ans" for="ans"><i class="fa fa-pencil"></i> Answer This Question </label>
+  <textarea class="form-control" name="ans" rows="5" id="ans" required></textarea>
+</p>
+    <button type=submit class="btn btn-success"> Post Your Answer </button>
+    </form>
+</div>
+</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+        <script>
+            $("#answerform").submit(function (e) {
+                e.preventDefault();
+                var serializedData = $(this).serialize();
+                $.ajax({
+                    type: 'POST',
+                    data: serializedData,
+                    success: function (response) {
+                      $("#answerform").trigger('reset');
+                        $("#answer").load(location.href + " #answer")
+                    },
+                    error: function (response) {
+                        alert(response["responseJSON"]["error"]);
+                    }
+                })
+            })
+        </script>
+
+{% endblock content %}
